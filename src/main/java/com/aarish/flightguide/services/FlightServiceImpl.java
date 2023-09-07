@@ -23,7 +23,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public CustomResponse getFlightDetails(FlightDetailsRequest flightDetailsRequest) {
-        String url = REMOTE_API_BASE_URL + "/" + flightDetailsRequest.getSource() + "/" + flightDetailsRequest.getDestination() + "/2023-09-03/" + 1 + "/" + 0 + "/" + 0 + "/" + flightDetailsRequest.getCabinClass() + "/USD";
+        String url = REMOTE_API_BASE_URL + "/" + flightDetailsRequest.getSource() + "/" + flightDetailsRequest.getDestination() + "/2023-09-08/" + 1 + "/" + 0 + "/" + 0 + "/" + flightDetailsRequest.getCabinClass() + "/USD";
         Map<String, Object> response = null;
 
         try {
@@ -33,15 +33,15 @@ public class FlightServiceImpl implements FlightService {
             throw new RuntimeException("Failed to connect to remote api !");
         }
 
-        List<FlightDetail> flightDetailList = processData(flightDetailsRequest, response);
+        List<FlightDetail> flightDetailList = processData2(flightDetailsRequest, response);
         log.info("flights list size: {}", flightDetailList.size());
 
-        List<FlightDetail> finalResponseList = flightDetailList.stream()
-                .filter(flightDetail -> flightDetail.getFare() != null)
-                .toList();
+//        List<FlightDetail> finalResponseList = flightDetailList.stream()
+//                .filter(flightDetail -> flightDetail.getFare() != null)
+//                .toList();
 
         return CustomResponse.builder()
-                .flightDetails(finalResponseList.toArray(new FlightDetail[finalResponseList.size()]))
+                .flightDetails(flightDetailList.toArray(new FlightDetail[flightDetailList.size()]))
                 .build();
     }
 
@@ -70,6 +70,36 @@ public class FlightServiceImpl implements FlightService {
             }
             flightDetailList.add(flightDetail);
         }
+        return flightDetailList;
+    }
+
+    private List<FlightDetail> processData2(FlightDetailsRequest request, Map<String, Object> response) {
+        List<FlightDetail> flightDetailList = new ArrayList<>();
+
+        List<Map<String, Object>> trips = (List<Map<String, Object>>) response.get("trips");
+        List<Map<String, Object>> fares = (List<Map<String, Object>>) response.get("fares");
+
+        log.info("outer loop will run {} times", trips.size());
+
+        for(int i=0; i<trips.size(); i++) {
+            String tripId = (String) trips.get(i).get("id");
+
+            for(int j=0; j<fares.size(); j++) {
+                String fareId = (String) fares.get(j).get("tripId");
+
+                if(tripId.equals(fareId)){
+                    FlightDetail flightDetail = new FlightDetail();
+
+                    flightDetail.setSource(request.getSource());
+                    flightDetail.setDestination(request.getDestination());
+                    Map<String, Integer> prices = (Map<String, Integer>) fares.get(j).get("price");
+                    flightDetail.setFare(prices.get("totalAmount"));
+
+                    flightDetailList.add(flightDetail);
+                }
+            }
+        }
+
         return flightDetailList;
     }
 
