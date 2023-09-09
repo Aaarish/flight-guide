@@ -16,7 +16,12 @@ public class FlightController {
 
     @PostMapping
     public ResponseEntity<CustomResponse> getFlightDetails(@RequestBody FlightDetailsRequest flightDetailsRequest) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(flightService.getFlightDetails(flightDetailsRequest));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(flightService.getAllFlightDetails(flightDetailsRequest));
+    }
+
+    @PostMapping("/cheapest")
+    public ResponseEntity<CustomResponse> getTenCheapestFlightDetails(@RequestBody FlightDetailsRequest flightDetailsRequest) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(flightService.getTenCheapestFlightDetails(flightDetailsRequest));
     }
 
 }

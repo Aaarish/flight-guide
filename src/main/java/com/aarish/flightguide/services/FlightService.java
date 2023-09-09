@@ -6,6 +6,7 @@ import com.aarish.flightguide.dto.responses.CustomResponse;
 
 public interface FlightService {
 
-    CustomResponse getFlightDetails(FlightDetailsRequest flightDetailsRequest);
+    CustomResponse getAllFlightDetails(FlightDetailsRequest flightDetailsRequest);
+    CustomResponse getTenCheapestFlightDetails(FlightDetailsRequest flightDetailsRequest);
 
 }

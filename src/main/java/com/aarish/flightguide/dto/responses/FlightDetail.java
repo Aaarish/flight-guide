@@ -2,20 +2,24 @@ package com.aarish.flightguide.dto.responses;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FlightDetail {
+public class FlightDetail implements Comparable<FlightDetail> {
     private String source;
     private String destination;
     private String airline;
     private Integer fare;
-    private String flightDurationInHours;
-    private LocalDateTime departureTime;
-    private LocalDateTime arrivalTime;
+    private String flightDurationInMinutes;
+    private LocalTime departureTime;
+    private LocalTime arrivalTime;
 
+    @Override
+    public int compareTo(FlightDetail other) {
+        return this.getFare() - other.getFare();
+    }
 }
