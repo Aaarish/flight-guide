@@ -22,7 +22,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public CustomResponse getAllFlightDetails(FlightDetailsRequest flightDetailsRequest) {
-        String url = REMOTE_API_BASE_URL + "/" + flightDetailsRequest.getSource() + "/" + flightDetailsRequest.getDestination() + "/2023-09-10/" + 1 + "/" + 0 + "/" + 0 + "/" + flightDetailsRequest.getCabinClass() + "/USD";
+        String url = REMOTE_API_BASE_URL + "/" + flightDetailsRequest.getSource() + "/" + flightDetailsRequest.getDestination() + "/2023-09-12/" + 1 + "/" + 0 + "/" + 0 + "/" + flightDetailsRequest.getCabinClass() + "/USD";
         Map<String, Object> response = null;
 
         try {
@@ -90,10 +90,12 @@ public class FlightServiceImpl implements FlightService {
         List<Map<String, Object>> legs = (List<Map<String, Object>>) response.get("legs");
         List<Map<String, Object>> trips = (List<Map<String, Object>>) response.get("trips");
         List<Map<String, Object>> fares = (List<Map<String, Object>>) response.get("fares");
+        Map<String, Integer> faresCount = (Map<String, Integer>) response.get("faresCount");
 
         log.info("size of trips array : {}", trips.size());
         log.info("size of legs array :  {}", legs.size());
         log.info("size of fares array :  {}", fares.size());
+        log.info("size of faresCount array :  {}", faresCount.size());
 
         for(int i=0; i<trips.size(); i++) {
             FlightDetail flightDetail = new FlightDetail();
