@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FlightServiceImpl implements FlightService {
-    private static final String REMOTE_API_BASE_URL = "https://api.flightapi.io/onewaytrip/6500ac41d3c92be52698e9a6";
+    private static final String REMOTE_API_BASE_URL = "https://api.flightapi.io/onewaytrip/650203c45c11b257e99a9020";
 
     private final RestTemplate restTemplate;
     private final AirportRepo airportRepo;
@@ -46,7 +46,19 @@ public class FlightServiceImpl implements FlightService {
         log.info("source airport name : {}", sourceAirport.getAirportName());
         log.info("destination airport name : {}", destinationAirport.getAirportName());
 
-        String url = REMOTE_API_BASE_URL + "/" + sourceAirport.getAirportCode() + "/" + destinationAirport.getAirportCode() + "/2023-12-20/" + 1 + "/" + 0 + "/" + 0 + "/" + flightDetailsRequest.getCabinClass() + "/USD";
+        int numOfAdults = 1;
+        int numOfChildren = 0;
+        int numOfInfants = 0;
+
+        if(flightDetailsRequest.getNumOfAdults() != null) numOfAdults = flightDetailsRequest.getNumOfAdults();
+        if(flightDetailsRequest.getNumOfChildren() != null) numOfChildren = flightDetailsRequest.getNumOfChildren();
+        if(flightDetailsRequest.getNumOfInfants() != null) numOfInfants = flightDetailsRequest.getNumOfInfants();
+
+        log.info("number of adults : {}", numOfAdults);
+        log.info("number of children : {}", numOfChildren);
+        log.info("number of infants : {}", numOfInfants);
+
+        String url = REMOTE_API_BASE_URL + "/" + sourceAirport.getAirportCode() + "/" + destinationAirport.getAirportCode() + "/" + flightDetailsRequest.getDateString() + "/" + numOfAdults + "/" + numOfChildren + "/" + numOfInfants + "/" + flightDetailsRequest.getCabinClass() + "/USD";
         Map<String, Object> response = null;
 
         try {
