@@ -1,4 +1,4 @@
-package com.aarish.flightguide.services;
+package com.aarish.flightguide.services.impl;
 
 import com.aarish.flightguide.dto.requests.FlightDetailsRequest;
 import com.aarish.flightguide.dto.responses.CustomResponse;
@@ -7,6 +7,7 @@ import com.aarish.flightguide.entities.Airport;
 import com.aarish.flightguide.entities.City;
 import com.aarish.flightguide.repositories.AirportRepo;
 import com.aarish.flightguide.repositories.CityRepo;
+import com.aarish.flightguide.services.FlightService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
